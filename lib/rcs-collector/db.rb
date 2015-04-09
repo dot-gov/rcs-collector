@@ -619,7 +619,7 @@ class DB
 
   def network_protocol_cookies(force=false)
     # use in memory cache for the results
-    cookies = @np_cookies
+    cookies = @np_cookies || []
 
     return cookies unless @available
     return cookies if not cookies.nil? and not cookies.empty? and not force
