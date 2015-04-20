@@ -10,7 +10,7 @@ namespace :encode do
       RUBYENC = "\"C:\\Program Files (x86)\\RubyEncoder\\rgencoder.exe\""
   end
 
-  RUBYENC_VERSION = '2.0.0'
+  RUBYENC_VERSION = RUBY_VERSION.split(".")[0..1].join(".")+".0"
 
   def exec_rubyencoder(cmd)
     if verbose?
