@@ -105,7 +105,7 @@ DEPENDENCIES
   persistent_http
   pry
   rake
-  rcs-common (>= 9.5.1)!
+  rcs-common (>= 9.6.0)!
   rubyzip (= 1.0.0)
   sqlite3
   test-unit
