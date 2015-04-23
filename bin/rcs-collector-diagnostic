@@ -58,19 +58,13 @@ end
 zipname = $options[:output] || File.basename(__FILE__)
 zipname << ".zip" unless zipname =~ /zip$/i
 
-puts "Execution directory is #{execution_directory}"
-puts "Generating file #{zipname}. It may take a while."
+puts "Generating file #{execution_directory}/#{zipname}. It may take a while."
 
 buffer = Zip::OutputStream.write_buffer do |out|
   relevant_logs.each do |path|
-    if huge_log?(path)
-      puts "Warning: #{path} is too big"
-      next
-    end
-
     entry = path[path.index('log/')..-1]
     out.put_next_entry(entry)
-    out.write(hide_addresses(File.read(path)))
+    out.write(hide_addresses(read_log_file(path)))
   end
 
   config_files.each do |path|
