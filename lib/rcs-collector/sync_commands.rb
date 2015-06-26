@@ -64,6 +64,9 @@ module Commands
     # if the source id cannot be determined by the client, set it to the ip address
     source_id = peer if source_id.eql? '' or source_id.downcase.eql? 'unknown'
 
+    # Interrupt prev open sessions from the same device (if any)
+    SessionManager.instance.timeout_prev(session)
+
     trace :info, "[#{peer}][#{session[:cookie]}] Identification: #{version} '#{user_id}' '#{device_id}' '#{source_id}'"
 
     # get the time in UTC

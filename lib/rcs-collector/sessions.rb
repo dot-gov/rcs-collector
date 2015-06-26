@@ -89,6 +89,29 @@ class SessionManager
     end
   end
 
+  def timeout_prev(current_session)
+    prev_session = nil
+
+    # Find an old session with the same ident + instance
+    @semaphore.synchronize do
+      @sessions.each_pair do |cookie, session|
+        if session[:instance] == current_session[:instance] and session[:ident] == current_session[:ident] and session[:cookie] != current_session[:cookie]
+          prev_session = session
+          @sessions.delete(cookie)
+          break
+        end
+      end
+    end
+
+    if prev_session
+      trace(:info, "[#{current_session[:ip]}][#{prev_session[:cookie]}] Synchronization interrupted by a new one")
+
+      prev_session[:sync_stat].timedout
+      DB.instance.sync_timeout(prev_session)
+      EvidenceManager.instance.sync_timeout(prev_session)
+    end
+  end
+
   # default timeout is 2 hours
   # this timeout is calculated from the last time the cookie was
   # checked, it will fail during a sync only if a request (i.e. log transfer)
